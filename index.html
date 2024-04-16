@@ -11,7 +11,7 @@
     <canvas width="1080px" height="720px"></canvas>
     <div>
         <label for="start">Start Node: </label>
-        <select name="start">
+        <select name="start" id="start-node">
             <option value="A" selected>A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -36,7 +36,7 @@
         </select>
 
         <label for="end">End Node: </label>
-        <select name="end">
+        <select name="end" id="end-node">
             <option value="A">A</option>
             <option value="B" selected>B</option>
             <option value="C">C</option>
@@ -67,7 +67,9 @@
             <input type="radio" id="a-star" name="sort-type">
         </div>
 
-        <button>Run Search</button>
+        <button id="run-btn">Run Search</button>
     </div>
+
+    <h2 id="warning"></h2>
 </body>
 </html>

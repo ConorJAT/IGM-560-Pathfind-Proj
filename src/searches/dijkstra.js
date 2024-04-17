@@ -104,8 +104,11 @@ const printShortest = (endNode) => {
     let string = '';
 
     while (current !== null) {
+        current.color = 'blue';
+
         if (current.neighbor) string += `${current.name} <= `;
         else string += `${current.name}`;
+
         current = current.neighbor;
     }
 

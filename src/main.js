@@ -88,6 +88,7 @@ const init = () => {
     const chooseStart = document.getElementById('start-node');
     const chooseEnd = document.getElementById('end-node');
     const startBtn = document.getElementById('run-btn');
+    const resetBtn = document.getElementById('reset-btn');
 
     chooseStart.addEventListener('change', () => {
         if (endNode.name === chooseStart.value) return;
@@ -133,6 +134,26 @@ const init = () => {
 
         if (sortOptions[0].checked) { DijkstraSearch(startNode, endNode, points, paths); } 
         else if (sortOptions[1].checked) { AStarSearch(startNode, endNode, points, paths); }
+
+        drawGraph(ctx);
+
+        startBtn.setAttribute('disabled', 'true');
+        resetBtn.removeAttribute('disabled');
+    });
+
+    resetBtn.addEventListener('click', () => {
+        points.forEach(point => {
+            if (point === startNode) { point.color = 'red'; }
+            else if (point === endNode) { point.color = 'green'; }
+            else {point.color = 'white'; }
+
+            resetPoints();
+
+            drawGraph(ctx);
+
+            startBtn.removeAttribute('disabled');
+            resetBtn.setAttribute('disabled', 'true');
+        });
     });
 
     drawGraph(ctx);

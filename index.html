@@ -8,10 +8,13 @@
     <title>Web Pathfinding Project</title>
 </head>
 <body>
+    <h1>Web Pathfinding Project - IGME 560</h1>
+    <h3>Created by: Conor Race</h3>
     <canvas width="1080px" height="720px"></canvas>
-    <div>
-        <label for="start">Start Node: </label>
-        <select name="start" id="start-node">
+    <div id="controls">
+        <div class="node-select">
+            <label for="start">Start Node: </label>
+            <select name="start" id="start-node">
             <option value="A" selected>A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -33,10 +36,10 @@
             <option value="S">S</option>
             <option value="T">T</option>
             <option value="U">U</option>
-        </select>
+            </select>
 
-        <label for="end">End Node: </label>
-        <select name="end" id="end-node">
+            <label for="end">End Node: </label>
+            <select name="end" id="end-node">
             <option value="A">A</option>
             <option value="B" selected>B</option>
             <option value="C">C</option>
@@ -58,9 +61,10 @@
             <option value="S">S</option>
             <option value="T">T</option>
             <option value="U">U</option>
-        </select>
+            </select>
+        </div>
 
-        <div>
+        <div id="search-select">
             <label for="dijkstra">Dijkstra's Search</label>
             <input type="radio" id="dijkstra" name="sort-type" value="dijkstra" checked>
             <label for="a-star">A* Search</label>
@@ -68,6 +72,8 @@
         </div>
 
         <button id="run-btn">Run Search</button>
+
+        <button id="reset-btn" disabled>Reset Graph</button>
     </div>
 
     <h2 id="warning"></h2>

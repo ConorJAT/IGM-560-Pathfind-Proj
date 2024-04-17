@@ -76,53 +76,56 @@ const EuclidianHeuristic = (node1, node2) => {
 // -- HELPER FUNCTIONS --
 // Checks to see if there are any unvisited nodes.
 const anyUnivisted = (nodeList) => {
-let value = false;
+    let value = false;
 
-nodeList.forEach(node => {
-    if (!node.visited) { value = true; }
-});
+    nodeList.forEach(node => {
+        if (!node.visited) { value = true; }
+    });
 
-return value;
+    return value;
 };
 
 // Retrieves all neighbors of the current node.
 const getNeighbors = (currentNode, pathList) => {
-let result = [];
+    let result = [];
 
-pathList.forEach(path => {
-    if (path.point1 === currentNode || path.point2 === currentNode) { result.push(path); }
-});
+    pathList.forEach(path => {
+        if (path.point1 === currentNode || path.point2 === currentNode) { result.push(path); }
+    });
 
-return result;
+    return result;
 };
 
 // Retrieves the next unvisted node with the lowest estimated distance.
 const getNextUnvisted = (nodeList) => {
-let result = null;
-let lowestCost = 99999;
+    let result = null;
+    let lowestCost = 99999;
 
-nodeList.forEach(node => {
-    if (!node.visited && node.estDistance < lowestCost) { 
-        result = node;
-        lowestCost = node.estDistance;
-    }
-});
+    nodeList.forEach(node => {
+        if (!node.visited && node.estDistance < lowestCost) { 
+            result = node;
+            lowestCost = node.estDistance;
+        }
+    });
 
-return result;
+    return result;
 };
 
 // Logs out the shortest path from start to end.
 const printShortest = (endNode) => { 
-let current = endNode;
-let string = '';
+    let current = endNode;
+    let string = '';
 
-while (current !== null) {
-    if (current.neighbor) string += `${current.name} <= `;
-    else string += `${current.name}`;
-    current = current.neighbor;
-}
+    while (current !== null) {
+        current.color = 'blue';
 
-console.log(`Shortest Path: ${string}`);
+        if (current.neighbor) string += `${current.name} <= `;
+        else string += `${current.name}`;
+
+        current = current.neighbor;
+    }
+
+    console.log(`Shortest Path: ${string}`);
 }
 
 export default AStarSearch;

@@ -1,6 +1,10 @@
+// Import Classes
 import Point from './class/point.js';
 import Path from './class/path.js';
+
+// Import Search Algorithms
 import DijkstraSearch from './searches/dijkstra.js';
+import AStarSearch from './searches/a-star.js';
 
 const points = [
     new Point('A', 1000, 680, 'red'),
@@ -123,7 +127,8 @@ const init = () => {
             return;
         }
 
-        DijkstraSearch(startNode, endNode, points, paths);
+        //DijkstraSearch(startNode, endNode, points, paths);
+        //AStarSearch(startNode, endNode, points, paths);
     });
 
     drawGraph(ctx);

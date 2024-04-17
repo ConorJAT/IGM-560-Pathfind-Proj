@@ -3,7 +3,7 @@ const Point = class{
         this.name = name;
         this.visited = false;
         this.distance = 99999;
-        this.perm = false;
+        this.estDistance = 99999;
         this.neighbor = null;
 
         this.x = x;

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/styles.css"/>
     <script src="./src/main.js" type="module"></script>
     <title>Web Pathfinding Project</title>
@@ -71,11 +74,26 @@
             <input type="radio" id="a-star" name="sort-type" value="a-star">
         </div>
 
-        <button id="run-btn">Run Search</button>
-
-        <button id="reset-btn" disabled>Reset Graph</button>
+        <div id="color-toggle">
+            <label for="color-toggle">Toggle Colored Search: </label>
+            <input type="checkbox" id="toggle">
+        </div>
     </div>
 
-    <h2 id="warning"></h2>
+    <div id="color-controls">
+        <label for="red-count">Red Units: </label>
+        <input type="number" name='red' id="red-count" min="0" max="10" value="0">
+        <label for="yello-count">Yellow Units: </label>
+        <input type="number" name='yellow' id="yellow-count" min="0" max="10" value="0">
+        <label for="green-count">Green Units: </label>
+        <input type="number" name='green' id="green-count" min="0" max="10" value="0">
+        <label for="Blue-count">Blue Units: </label>
+        <input type="number" name='blue' id="blue-count" min="0" max="10" value="0">
+        <label for="purple-count">Purple Units: </label>
+        <input type="number" name='purple' id="purple-count" min="0" max="10" value="0">
+    </div>
+
+    <button id="run-btn">Run Search</button>
+    <button id="reset-btn" disabled>Reset Graph</button>
 </body>
 </html>

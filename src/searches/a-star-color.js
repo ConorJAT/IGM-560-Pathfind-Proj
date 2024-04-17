@@ -1,4 +1,4 @@
-const AStarSearch = (startNode, endNode, nodeList, pathList) => {
+const AStarColorSearch = (startNode, endNode, nodeList, pathList, colorSources) => {
     // Start time tracking.
     const startTime = Date.now() / 1000000000.0;
 
@@ -27,16 +27,35 @@ const AStarSearch = (startNode, endNode, nodeList, pathList) => {
             if (currentNode === neighbor.point1) { neighborNode = neighbor.point2; }
             else { neighborNode = neighbor.point1; }
 
-            // If the distance is less than the neighbor's distance...
-            if (distance < neighborNode.distance) {
-                // Set the neighbor's new distance.
-                neighborNode.distance = distance;
+            /// If the path is colored and the traveler has enough units to cross it.
+            if (neighbor.color !== 'lightgray' && colorSources[neighbor.color] >= neighbor.weight) {
+                // If the distance is less than the neighbor's distance...
+                if (distance < neighborNode.distance) {
+                    // Set the neighbor's new distance.
+                    neighborNode.distance = distance;
 
-                // Set the current node as the neighbor's "neighbor".
-                neighborNode.neighbor = currentNode;
+                    // Set the current node as the neighbor's "neighbor".
+                    neighborNode.neighbor = currentNode;
 
-                // Calculate estimated distance w/ heuristic.
-                neighborNode.estDistance = distance + EuclidianHeuristic(neighbor.point2, endNode);
+                    // Calculate estimated distance w/ heuristic.
+                    neighborNode.estDistance = distance + EuclidianHeuristic(neighbor.point2, endNode);
+
+                    // Subtract colored units.
+                    colorSources[neighbor.color] -= neighbor.weight;
+                }
+            // Else, if the path is colorless.
+            } else if (neighbor.color === 'lightgray') {
+                // If the distance is less than the neighbor's distance...
+                if (distance < neighborNode.distance) {
+                    // Set the neighbor's new distance.
+                    neighborNode.distance = distance;
+
+                    // Set the current node as the neighbor's "neighbor".
+                    neighborNode.neighbor = currentNode;
+
+                    // Calculate estimated distance w/ heuristic.
+                    neighborNode.estDistance = distance + EuclidianHeuristic(neighbor.point2, endNode);
+                }
             }
         });
 
@@ -122,4 +141,4 @@ const printShortest = (endNode) => {
     console.log(`Shortest Path: ${string}`);
 }
 
-export default AStarSearch;
+export default AStarColorSearch;

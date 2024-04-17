@@ -1,10 +1,9 @@
-const AStarSearch = (startNode, endNode, nodeList, pathList) => {
+const DijkstraColorSearch = async (startNode, endNode, nodeList, pathList, colorSources) => {
     // Start time tracking.
     const startTime = Date.now() / 1000000000.0;
 
     // Set start node's distance to 0.
     startNode.distance = 0;
-    startNode.estDistance = 0;
 
     // Set current node as the start node.
     let currentNode = startNode;
@@ -27,16 +26,29 @@ const AStarSearch = (startNode, endNode, nodeList, pathList) => {
             if (currentNode === neighbor.point1) { neighborNode = neighbor.point2; }
             else { neighborNode = neighbor.point1; }
 
-            // If the distance is less than the neighbor's distance...
-            if (distance < neighborNode.distance) {
-                // Set the neighbor's new distance.
-                neighborNode.distance = distance;
+            // If the path is colored and the traveler has enough units to cross it.
+            if (neighbor.color !== 'lightgray' && colorSources[neighbor.color] >= neighbor.weight) {
+                // If the distance is less than the neighbor's distance...
+                if (distance < neighborNode.distance) {
+                    // Set the neighbor's new distance.
+                    neighborNode.distance = distance;
 
-                // Set the current node as the neighbor's "neighbor".
-                neighborNode.neighbor = currentNode;
+                    // Set the current node as the neighbor's "neighbor".
+                    neighborNode.neighbor = currentNode;
 
-                // Calculate estimated distance w/ heuristic.
-                neighborNode.estDistance = distance + EuclidianHeuristic(neighbor.point2, endNode);
+                    // Subtract colored units.
+                    colorSources[neighbor.color] -= neighbor.weight;
+                }
+            // Else, if the path is colorless.
+            } else if (neighbor.color === 'lightgray') {
+                // If the distance is less than the neighbor's distance...
+                if (distance < neighborNode.distance) {
+                    // Set the neighbor's new distance.
+                    neighborNode.distance = distance;
+
+                    // Set the current node as the neighbor's "neighbor".
+                    neighborNode.neighbor = currentNode;
+                }
             }
         });
 
@@ -60,18 +72,11 @@ const AStarSearch = (startNode, endNode, nodeList, pathList) => {
     console.log(`Time Elapseed: ${totalTime} s`);
 };
 
-// -- HEURISTICS --
-const EuclidianHeuristic = (node1, node2) => {
-    const dx = node2.x - node1.x;
-    const dy = node2.y - node1.y;
-    return(Math.sqrt(dx*dx + dy*dy));
-};
-
 // -- HELPER FUNCTIONS --
 // Checks to see if there are any unvisited nodes.
 const anyUnivisted = (nodeList) => {
     let value = false;
-
+    
     nodeList.forEach(node => {
         if (!node.visited) { value = true; }
     });
@@ -90,15 +95,15 @@ const getNeighbors = (currentNode, pathList) => {
     return result;
 };
 
-// Retrieves the next unvisted node with the lowest estimated distance.
+// Retrieves the next unvisted node with the lowest distance.
 const getNextUnvisted = (nodeList) => {
     let result = null;
     let lowestCost = 99999;
-
+    
     nodeList.forEach(node => {
-        if (!node.visited && node.estDistance < lowestCost) { 
+        if (!node.visited && node.distance < lowestCost) { 
             result = node;
-            lowestCost = node.estDistance;
+            lowestCost = node.distance;
         }
     });
 
@@ -122,4 +127,4 @@ const printShortest = (endNode) => {
     console.log(`Shortest Path: ${string}`);
 }
 
-export default AStarSearch;
+export default DijkstraColorSearch;

@@ -22,21 +22,17 @@ const DijkstraSearch = async (startNode, endNode, nodeList, pathList) => {
             let distance = currentNode.distance + neighbor.weight;
 
             // Find the neighbor node.
-            if (currentNode === neighbor.point1) {
-                // If the distance is less than the neighbor's distance...
-                if (distance < neighbor.point2.distance) {
-                    // Set the neighbor's new distance.
-                    neighbor.point2.distance = distance;
- 
-                    // Set the current node as the neighbor's "neighbor".
-                    neighbor.point2.neighbor = currentNode;
-                } 
-            } else if (currentNode === neighbor.point2) {
-                if (distance < neighbor.point1.distance) {
-                    neighbor.point1.distance = distance;
+            let neighborNode;
+            if (currentNode === neighbor.point1) { neighborNode = neighbor.point2; }
+            else { neighborNode = neighbor.point1; }
 
-                    neighbor.point1.neighbor = currentNode;
-                }
+            // If the distance is less than the neighbor's distance...
+            if (distance < neighborNode.distance) {
+                // Set the neighbor's new distance.
+                neighborNode.distance = distance;
+
+                // Set the current node as the neighbor's "neighbor".
+                neighborNode.neighbor = currentNode;
             }
         });
 

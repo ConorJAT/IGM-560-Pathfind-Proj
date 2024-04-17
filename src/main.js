@@ -4,7 +4,9 @@ import Path from './class/path.js';
 
 // Import Search Algorithms
 import DijkstraSearch from './searches/dijkstra.js';
+import DijkstraColorSearch from './searches/dijkstra-color.js';
 import AStarSearch from './searches/a-star.js';
+import AStarColorSearch from './searches/a-star-color.js';
 
 const points = [
     new Point('A', 1000, 680, 'red'),
@@ -30,53 +32,109 @@ const points = [
     new Point('U', 785, 40, 'white')   
 ];
 
-const paths = [
-    new Path(2, points[0], points[1], 'black'),
-    new Path(3, points[0], points[4], 'black'),
-    new Path(3, points[0], points[5], 'black'),
-    new Path(3, points[1], points[2], 'black'),
-    new Path(3, points[1], points[5], 'black'),
-    new Path(3, points[1], points[6], 'black'),
-    new Path(1, points[1], points[7], 'black'),
-    new Path(3, points[2], points[3], 'black'),
-    new Path(2, points[2], points[7], 'black'),
-    new Path(2, points[2], points[8], 'black'),
-    new Path(3, points[2], points[9], 'black'),
-    new Path(2, points[3], points[9], 'black'),
-    new Path(2, points[4], points[5], 'black'),
-    new Path(1, points[4], points[10], 'black'),
-    new Path(2, points[4], points[11], 'black'),
-    new Path(2, points[5], points[6], 'black'),
-    new Path(1, points[5], points[10], 'black'),
-    new Path(2, points[5], points[12], 'black'),
-    new Path(2, points[5], points[13], 'black'),
-    new Path(1, points[6], points[7], 'black'),
-    new Path(1, points[6], points[8], 'black'),
-    new Path(2, points[6], points[13], 'black'),
-    new Path(1, points[7], points[8], 'black'),
-    new Path(2, points[8], points[9], 'black'),
-    new Path(3, points[8], points[13], 'black'),
-    new Path(3, points[9], points[14], 'black'),
-    new Path(1, points[10], points[11], 'black'),
-    new Path(2, points[10], points[12], 'black'),
-    new Path(2, points[11], points[12], 'black'),
-    new Path(1, points[11], points[15], 'black'),
-    new Path(2, points[12], points[13], 'black'),
-    new Path(1, points[12], points[15], 'black'),
-    new Path(1, points[12], points[16], 'black'),
-    new Path(3, points[13], points[14], 'black'),
-    new Path(1, points[13], points[16], 'black'),
-    new Path(1, points[13], points[17], 'black'),
-    new Path(1, points[14], points[18], 'black'),
-    new Path(2, points[14], points[19], 'black'),
-    new Path(1, points[15], points[16], 'black'),
-    new Path(2, points[15], points[20], 'black'),
-    new Path(2, points[16], points[17], 'black'),
-    new Path(5, points[16], points[19], 'black'),
-    new Path(2, points[16], points[20], 'black'),
-    new Path(1, points[17], points[18], 'black'),
-    new Path(1, points[18], points[19], 'black')
+const defPaths = [
+    new Path(2, points[0], points[1], 'lightgray'),
+    new Path(3, points[0], points[4], 'lightgray'),
+    new Path(3, points[0], points[5], 'lightgray'),
+    new Path(3, points[1], points[2], 'lightgray'),
+    new Path(3, points[1], points[5], 'lightgray'),
+    new Path(3, points[1], points[6], 'lightgray'),
+    new Path(1, points[1], points[7], 'lightgray'),
+    new Path(3, points[2], points[3], 'lightgray'),
+    new Path(2, points[2], points[7], 'lightgray'),
+    new Path(2, points[2], points[8], 'lightgray'),
+    new Path(3, points[2], points[9], 'lightgray'),
+    new Path(2, points[3], points[9], 'lightgray'),
+    new Path(2, points[4], points[5], 'lightgray'),
+    new Path(1, points[4], points[10], 'lightgray'),
+    new Path(2, points[4], points[11], 'lightgray'),
+    new Path(2, points[5], points[6], 'lightgray'),
+    new Path(1, points[5], points[10], 'lightgray'),
+    new Path(2, points[5], points[12], 'lightgray'),
+    new Path(2, points[5], points[13], 'lightgray'),
+    new Path(1, points[6], points[7], 'lightgray'),
+    new Path(1, points[6], points[8], 'lightgray'),
+    new Path(2, points[6], points[13], 'lightgray'),
+    new Path(1, points[7], points[8], 'lightgray'),
+    new Path(2, points[8], points[9], 'lightgray'),
+    new Path(3, points[8], points[13], 'lightgray'),
+    new Path(3, points[9], points[14], 'lightgray'),
+    new Path(1, points[10], points[11], 'lightgray'),
+    new Path(2, points[10], points[12], 'lightgray'),
+    new Path(2, points[11], points[12], 'lightgray'),
+    new Path(1, points[11], points[15], 'lightgray'),
+    new Path(2, points[12], points[13], 'lightgray'),
+    new Path(1, points[12], points[15], 'lightgray'),
+    new Path(1, points[12], points[16], 'lightgray'),
+    new Path(3, points[13], points[14], 'lightgray'),
+    new Path(1, points[13], points[16], 'lightgray'),
+    new Path(1, points[13], points[17], 'lightgray'),
+    new Path(1, points[14], points[18], 'lightgray'),
+    new Path(2, points[14], points[19], 'lightgray'),
+    new Path(1, points[15], points[16], 'lightgray'),
+    new Path(2, points[15], points[20], 'lightgray'),
+    new Path(2, points[16], points[17], 'lightgray'),
+    new Path(5, points[16], points[19], 'lightgray'),
+    new Path(2, points[16], points[20], 'lightgray'),
+    new Path(1, points[17], points[18], 'lightgray'),
+    new Path(1, points[18], points[19], 'lightgray')
 ];
+
+const coloredPaths = [
+    new Path(2, points[0], points[1], 'lightgray'),
+    new Path(3, points[0], points[4], 'lightgray'),
+    new Path(3, points[0], points[5], 'yellow'),
+    new Path(3, points[1], points[2], 'red'),
+    new Path(3, points[1], points[5], 'lightgray'),
+    new Path(3, points[1], points[6], 'lightgray'),
+    new Path(1, points[1], points[7], 'blue'),
+    new Path(3, points[2], points[3], 'purple'),
+    new Path(2, points[2], points[7], 'yellow'),
+    new Path(2, points[2], points[8], 'lightgray'),
+    new Path(3, points[2], points[9], 'green'),
+    new Path(2, points[3], points[9], 'lightgray'),
+    new Path(2, points[4], points[5], 'green'),
+    new Path(1, points[4], points[10], 'blue'),
+    new Path(2, points[4], points[11], 'purple'),
+    new Path(2, points[5], points[6], 'lightgray'),
+    new Path(1, points[5], points[10], 'lightgray'),
+    new Path(2, points[5], points[12], 'blue'),
+    new Path(2, points[5], points[13], 'purple'),
+    new Path(1, points[6], points[7], 'red'),
+    new Path(1, points[6], points[8], 'purple'),
+    new Path(2, points[6], points[13], 'yellow'),
+    new Path(1, points[7], points[8], 'lightgray'),
+    new Path(2, points[8], points[9], 'lightgray'),
+    new Path(3, points[8], points[13], 'lightgray'),
+    new Path(3, points[9], points[14], 'blue'),
+    new Path(1, points[10], points[11], 'lightgray'),
+    new Path(2, points[10], points[12], 'yellow'),
+    new Path(2, points[11], points[12], 'lightgray'),
+    new Path(1, points[11], points[15], 'lightgray'),
+    new Path(2, points[12], points[13], 'green'),
+    new Path(1, points[12], points[15], 'purple'),
+    new Path(1, points[12], points[16], 'red'),
+    new Path(3, points[13], points[14], 'red'),
+    new Path(1, points[13], points[16], 'lightgray'),
+    new Path(1, points[13], points[17], 'lightgray'),
+    new Path(1, points[14], points[18], 'lightgray'),
+    new Path(2, points[14], points[19], 'green'),
+    new Path(1, points[15], points[16], 'lightgray'),
+    new Path(2, points[15], points[20], 'lightgray'),
+    new Path(2, points[16], points[17], 'green'),
+    new Path(5, points[16], points[19], 'lightgray'),
+    new Path(2, points[16], points[20], 'blue'),
+    new Path(1, points[17], points[18], 'lightgray'),
+    new Path(1, points[18], points[19], 'red')
+];
+
+const colorSources = {
+    red: 0,
+    yellow: 0,
+    green: 0,
+    blue: 0,
+    purple: 0,
+};
 
 let startNode = points[0]; 
 let endNode = points[1];
@@ -87,6 +145,8 @@ const init = () => {
     
     const chooseStart = document.getElementById('start-node');
     const chooseEnd = document.getElementById('end-node');
+    const colorToggle = document.getElementById('toggle')
+    const colorCounts = document.querySelectorAll('input[type="number"]');
     const startBtn = document.getElementById('run-btn');
     const resetBtn = document.getElementById('reset-btn');
 
@@ -101,7 +161,7 @@ const init = () => {
                 point.color = 'white';
             }
 
-            drawGraph(ctx);
+            drawGraph(ctx, colorToggle.checked);
         });
     });
 
@@ -116,26 +176,25 @@ const init = () => {
                 point.color = 'white';
             }
 
-            drawGraph(ctx);
+            drawGraph(ctx, colorToggle.checked);
         });
     });
 
     startBtn.addEventListener('click', () => {
-        document.getElementById('warning').innerHTML = '';
-
-        if (startNode.name === endNode.name) {
-            document.getElementById('warning').innerHTML = 'Start and end nodes must be different!';
-            return;
-        }
-
-        resetPoints();
+        resetPoints(colorCounts);
 
         const sortOptions = document.querySelectorAll('input[name="sort-type"]');
 
-        if (sortOptions[0].checked) { DijkstraSearch(startNode, endNode, points, paths); } 
-        else if (sortOptions[1].checked) { AStarSearch(startNode, endNode, points, paths); }
+        if (sortOptions[0].checked) { 
+            if (colorToggle.checked) { DijkstraColorSearch(startNode, endNode, points, coloredPaths, colorSources); }
+            else { DijkstraSearch(startNode, endNode, points, defPaths); }
+        } 
+        else if (sortOptions[1].checked) { 
+            if (colorToggle.checked) { AStarColorSearch(startNode, endNode, points, coloredPaths, colorSources); }
+            else { AStarSearch(startNode, endNode, points, defPaths);  }
+        }
 
-        drawGraph(ctx);
+        drawGraph(ctx, colorToggle.checked);
 
         startBtn.setAttribute('disabled', 'true');
         resetBtn.removeAttribute('disabled');
@@ -147,30 +206,44 @@ const init = () => {
             else if (point === endNode) { point.color = 'green'; }
             else {point.color = 'white'; }
 
-            resetPoints();
+            resetPoints(colorCounts);
 
-            drawGraph(ctx);
+            drawGraph(ctx, colorToggle.checked);
 
             startBtn.removeAttribute('disabled');
             resetBtn.setAttribute('disabled', 'true');
         });
     });
 
-    drawGraph(ctx);
+    colorCounts.forEach(input => {
+        input.addEventListener('change', () => {
+            colorSources[input.name] = parseInt(input.value);
+            console.log(colorSources);
+        });
+    });
+
+    colorToggle.addEventListener('change', () => { drawGraph(ctx, colorToggle.checked); });
+
+    drawGraph(ctx, colorToggle.checked);
 };
 
-const drawGraph = (ctx) => {
-    paths.forEach((path) => { path.draw(ctx); });
+const drawGraph = (ctx, isColored) => {
+    if (isColored) { coloredPaths.forEach((path) => { path.draw(ctx); }); }
+    else { defPaths.forEach((path) => { path.draw(ctx); }); }
     points.forEach((point) => { point.draw(ctx); });
 };
 
-const resetPoints = () => {
+const resetPoints = (colorCounts) => {
     points.forEach(point => {
         point.visited = false;
         point.distance = 99999;
         point.estDistance = 99999;
         point.neighbor = null;
-    })
+    });
+
+    colorCounts.forEach(input => {
+        colorSources[input.name] = parseInt(input.value);
+    });
 };
 
 init();

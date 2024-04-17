@@ -1,7 +1,6 @@
 const Path = class{
     constructor(weight, point1, point2, color) {
         this.weight = weight
-        this.taken = false;
         this.point1 = point1;
         this.point2 = point2;
         this.color = color; 
@@ -25,7 +24,6 @@ const Path = class{
 
             ctx.restore();
         }
-        
     }
 };
 

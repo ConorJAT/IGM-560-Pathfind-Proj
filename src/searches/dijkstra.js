@@ -1,4 +1,7 @@
 const DijkstraSearch = async (startNode, endNode, nodeList, pathList) => {
+    // Start time tracking.
+    const startTime = Date.now() / 1000000000.0;
+
     // Set start node's distance to 0.
     startNode.distance = 0;
 
@@ -44,11 +47,17 @@ const DijkstraSearch = async (startNode, endNode, nodeList, pathList) => {
         currentNode = getNextUnvisted(nodeList);
     }
 
+    // "Stop" the timer.
+    const totalTime = Date.now() / 1000000000.0 - startTime;
+
     // Log out entire path information.
     console.log(nodeList);
 
     // Log out the shortest path from start to finish.
     printShortest(endNode);
+
+    // Log out total time.
+    console.log(`Time Elapseed: ${totalTime} s`);
 };
 
 // -- HELPER FUNCTIONS --

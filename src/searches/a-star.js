@@ -1,60 +1,69 @@
 const AStarSearch = (startNode, endNode, nodeList, pathList) => {
-// Set start node's distance to 0.
-startNode.distance = 0;
-startNode.estDistance = 0;
+    // Start time tracking.
+    const startTime = Date.now() / 1000000000.0;
 
-// Set current node as the start node.
-let currentNode = startNode;
+    // Set start node's distance to 0.
+    startNode.distance = 0;
+    startNode.estDistance = 0;
 
-// While there are any unvisited nodes and while the current node is not null...
-while (anyUnivisted(nodeList) && currentNode !== null) {
-    // If the current node is the end node, break.
-    if (currentNode === endNode) break;
-    
-    // Get all neighbors of the current node.
-    let neighbors = getNeighbors(currentNode, pathList);
+    // Set current node as the start node.
+    let currentNode = startNode;
 
-    // For each neighbor node...
-    neighbors.forEach(neighbor => {
-        // Calculate the distance via the current node + the path weight.
-        let distance = currentNode.distance + neighbor.weight;
+    // While there are any unvisited nodes and while the current node is not null...
+    while (anyUnivisted(nodeList) && currentNode !== null) {
+        // If the current node is the end node, break.
+        if (currentNode === endNode) break;
+        
+        // Get all neighbors of the current node.
+        let neighbors = getNeighbors(currentNode, pathList);
 
-        // Find the neighbor node.
-        if (currentNode === neighbor.point1) {
-            // If the distance is less than the neighbor's distance...
-            if (distance < neighbor.point2.distance) {
-                // Set the neighbor's new distance.
-                neighbor.point2.distance = distance;
+        // For each neighbor node...
+        neighbors.forEach(neighbor => {
+            // Calculate the distance via the current node + the path weight.
+            let distance = currentNode.distance + neighbor.weight;
 
-                // Calculate estimated distance w/ heuristic.
-                neighbor.point2.estDistance = distance + EuclidianHeuristic(neighbor.point2, endNode);
+            // Find the neighbor node.
+            if (currentNode === neighbor.point1) {
+                // If the distance is less than the neighbor's distance...
+                if (distance < neighbor.point2.distance) {
+                    // Set the neighbor's new distance.
+                    neighbor.point2.distance = distance;
 
-                // Set the current node as the neighbor's "neighbor".
-                neighbor.point2.neighbor = currentNode;
-            } 
-        } else if (currentNode === neighbor.point2) {
-            if (distance < neighbor.point1.distance) {
-                neighbor.point1.distance = distance;
+                    // Calculate estimated distance w/ heuristic.
+                    neighbor.point2.estDistance = distance + EuclidianHeuristic(neighbor.point2, endNode);
 
-                neighbor.point1.estDistance = distance + EuclidianHeuristic(neighbor.point1, endNode);
+                    // Set the current node as the neighbor's "neighbor".
+                    neighbor.point2.neighbor = currentNode;
+                } 
+            } else if (currentNode === neighbor.point2) {
+                if (distance < neighbor.point1.distance) {
+                    neighbor.point1.distance = distance;
 
-                neighbor.point1.neighbor = currentNode;
+                    neighbor.point1.estDistance = distance + EuclidianHeuristic(neighbor.point1, endNode);
+
+                    neighbor.point1.neighbor = currentNode;
+                }
             }
-        }
-    });
+        });
 
-    // Set the current node as visited.
-    currentNode.visited = true; 
+        // Set the current node as visited.
+        currentNode.visited = true; 
 
-    // Get the next unvisited node with the lowest distance.
-    currentNode = getNextUnvisted(nodeList);
-}
+        // Get the next unvisited node with the lowest distance.
+        currentNode = getNextUnvisted(nodeList);
+    }
 
-// Log out entire path information.
-console.log(nodeList);
+    // "Stop" the timer.
+    const totalTime = Date.now() / 1000000000.0 - startTime;
 
-// Log out the shortest path from start to finish.
-printShortest(endNode);
+    // Log out entire path information.
+    console.log(nodeList);
+
+    // Log out the shortest path from start to finish.
+    printShortest(endNode);
+
+    // Log out total time.
+    console.log(`Time Elapseed: ${totalTime} s`);
 };
 
 // -- HEURISTICS --

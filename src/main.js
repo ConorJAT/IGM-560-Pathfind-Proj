@@ -127,16 +127,29 @@ const init = () => {
             return;
         }
 
-        //DijkstraSearch(startNode, endNode, points, paths);
-        //AStarSearch(startNode, endNode, points, paths);
+        resetPoints();
+
+        const sortOptions = document.querySelectorAll('input[name="sort-type"]');
+
+        if (sortOptions[0].checked) { DijkstraSearch(startNode, endNode, points, paths); } 
+        else if (sortOptions[1].checked) { AStarSearch(startNode, endNode, points, paths); }
     });
 
     drawGraph(ctx);
-}
+};
 
 const drawGraph = (ctx) => {
     paths.forEach((path) => { path.draw(ctx); });
     points.forEach((point) => { point.draw(ctx); });
-}
+};
+
+const resetPoints = () => {
+    points.forEach(point => {
+        point.visited = false;
+        point.distance = 99999;
+        point.estDistance = 99999;
+        point.neighbor = null;
+    })
+};
 
 init();

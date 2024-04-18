@@ -8,6 +8,7 @@ import DijkstraColorSearch from './searches/dijkstra-color.js';
 import AStarSearch from './searches/a-star.js';
 import AStarColorSearch from './searches/a-star-color.js';
 
+// Array of nodes.
 const points = [
     new Point('A', 1000, 680, 'red'),
     new Point('B', 770, 680, 'green'),
@@ -32,6 +33,7 @@ const points = [
     new Point('U', 785, 40, 'white')   
 ];
 
+// Array of default (gray) paths connecting nodes.
 const defPaths = [
     new Path(2, points[0], points[1], 'lightgray'),
     new Path(3, points[0], points[4], 'lightgray'),
@@ -80,6 +82,7 @@ const defPaths = [
     new Path(1, points[18], points[19], 'lightgray')
 ];
 
+// Array of various colored paths that require units to cross.
 const coloredPaths = [
     new Path(2, points[0], points[1], 'lightgray'),
     new Path(3, points[0], points[4], 'lightgray'),
@@ -102,7 +105,7 @@ const coloredPaths = [
     new Path(2, points[5], points[13], 'purple'),
     new Path(1, points[6], points[7], 'red'),
     new Path(1, points[6], points[8], 'purple'),
-    new Path(2, points[6], points[13], 'yellow'),
+    new Path(2, points[6], points[13], 'lightgray'),
     new Path(1, points[7], points[8], 'lightgray'),
     new Path(2, points[8], points[9], 'lightgray'),
     new Path(3, points[8], points[13], 'lightgray'),
@@ -119,7 +122,7 @@ const coloredPaths = [
     new Path(1, points[13], points[17], 'lightgray'),
     new Path(1, points[14], points[18], 'lightgray'),
     new Path(2, points[14], points[19], 'green'),
-    new Path(1, points[15], points[16], 'lightgray'),
+    new Path(1, points[15], points[16], 'yellow'),
     new Path(2, points[15], points[20], 'lightgray'),
     new Path(2, points[16], points[17], 'green'),
     new Path(5, points[16], points[19], 'lightgray'),
@@ -128,6 +131,7 @@ const coloredPaths = [
     new Path(1, points[18], points[19], 'red')
 ];
 
+// Object that holds counts for various color units.
 const colorSources = {
     red: 0,
     yellow: 0,
@@ -136,6 +140,7 @@ const colorSources = {
     purple: 0,
 };
 
+// Default start/end nodes are the first and second nodes.
 let startNode = points[0]; 
 let endNode = points[1];
 
@@ -150,6 +155,7 @@ const init = () => {
     const startBtn = document.getElementById('run-btn');
     const resetBtn = document.getElementById('reset-btn');
 
+    // Set up select UI for start node.
     chooseStart.addEventListener('change', () => {
         if (endNode.name === chooseStart.value) return;
 
@@ -165,6 +171,7 @@ const init = () => {
         });
     });
 
+    // Set up select UI for end node.
     chooseEnd.addEventListener('change', () => {
         if (startNode.name === chooseEnd.value) return;
 
@@ -180,26 +187,34 @@ const init = () => {
         });
     });
 
+    // Set up button to begin algorithmic search.
     startBtn.addEventListener('click', () => {
+        // Reset all points.
         resetPoints(colorCounts);
 
+        // Get radio buttons from HTML.
         const sortOptions = document.querySelectorAll('input[name="sort-type"]');
 
+        // If first option is checked, perform Dijkstra's Search.
         if (sortOptions[0].checked) { 
             if (colorToggle.checked) { DijkstraColorSearch(startNode, endNode, points, coloredPaths, colorSources); }
             else { DijkstraSearch(startNode, endNode, points, defPaths); }
         } 
+        // If second option is checked, perform A* Search.
         else if (sortOptions[1].checked) { 
             if (colorToggle.checked) { AStarColorSearch(startNode, endNode, points, coloredPaths, colorSources); }
             else { AStarSearch(startNode, endNode, points, defPaths);  }
         }
 
+        // Redraw graph.
         drawGraph(ctx, colorToggle.checked);
 
+        // Swap button states for start and reset.
         startBtn.setAttribute('disabled', 'true');
         resetBtn.removeAttribute('disabled');
     });
 
+    // Set up button to reset the graph and data.
     resetBtn.addEventListener('click', () => {
         points.forEach(point => {
             if (point === startNode) { point.color = 'red'; }
@@ -215,6 +230,7 @@ const init = () => {
         });
     });
 
+    // Set up increment/decrement UI to add and subtract color units.
     colorCounts.forEach(input => {
         input.addEventListener('change', () => {
             colorSources[input.name] = parseInt(input.value);
@@ -222,8 +238,10 @@ const init = () => {
         });
     });
 
+    // Redraw graph if the color toggle is clicked.
     colorToggle.addEventListener('change', () => { drawGraph(ctx, colorToggle.checked); });
 
+    // Initial draw.
     drawGraph(ctx, colorToggle.checked);
 };
 
